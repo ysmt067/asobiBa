@@ -11,7 +11,3 @@ This package contains the Google Cloud Storage trigger implementation for handli
 ```typescript
 import { TriggerUploadGcs } from '@asobiba/gsc-trigger';
 ```
-
-## Note
-
-This is a copy of the implementation from the `triggers` directory for monorepo preparation.

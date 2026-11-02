@@ -17,7 +17,3 @@ This package contains the photo sharing API implementations.
 ```typescript
 import { PhotosSearchPostHandler, TagsGetHandler } from '@asobiba/share-photo-api';
 ```
-
-## Note
-
-This is a copy of the implementation from the `mahjong-hono` directory for monorepo preparation.

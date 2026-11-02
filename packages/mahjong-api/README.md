@@ -19,7 +19,3 @@ This package contains the mahjong-related API implementations.
 ```typescript
 import { HandsGetHander, ScoreDeclarationsGetHandler } from '@asobiba/mahjong-api';
 ```
-
-## Note
-
-This is a copy of the implementation from the `mahjong-hono` directory for monorepo preparation.
