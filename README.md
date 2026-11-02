@@ -71,11 +71,6 @@ pnpm dev
 pnpm --filter @asobiba/mahjong-api dev
 ```
 
-## 非推奨ディレクトリ
-
-- `mahjong-hono/` - `packages/mahjong-api` に移行済み
-- `triggers/` - `packages/gsc-trigger` に移行済み
-
 ## データベース構成
 
 ### テスト用データベース（Docker）

@@ -13,9 +13,6 @@
     "quickfix.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
-  "conventionalCommits.scopes": ["mahjong hono"],
-  "jest.runMode": "watch",
-  "jest.rootPath": "mahjong-hono",
   "files.autoSave": "afterDelay",
   "editor.tabSize": 2,
   "editor.renderWhitespace": "all",
