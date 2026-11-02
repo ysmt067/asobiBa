@@ -4,7 +4,13 @@
 
 ## コミュニケーション
 
-- ユーザーとの会話、PR のタイトル・説明は日本語で書く。
+- ユーザーとの会話、コミットメッセージ、PR のタイトル・説明は日本語で書く。
+
+## 役割分担
+
+- 実装: Claude Code（このファイルに従う）
+- コードレビュー: GitHub Copilot（`.github/copilot-instructions.md` に従う）
+- 決め事を変えたときは、両方のファイルの内容を揃える。
 
 ## 実装の進め方
 
@@ -19,6 +25,8 @@
    - テストが通る最小限の実装を行い、必要ならリファクタリングする。
    - `pnpm build` / `pnpm test` / `pnpm lint` が通ることを確認して報告する。
 
+PR はステップごとに 1 つ作る（I/F 定義の PR → テストの PR → 実装の PR）。前のステップの PR がマージされてから次のステップに進む。
+
 途中で I/F の変更が必要になった場合は、勝手に変えずに理由を示して相談する。
 
 ## アーキテクチャ
@@ -32,17 +40,34 @@
 src/
 ├── application/
 │   ├── domain/
-│   │   ├── model/          # エンティティ・値オブジェクト（xxx.ts, xxx.unit.test.ts）
+│   │   ├── model/          # エンティティ・値オブジェクト
 │   │   └── service/        # ユースケースの実装。port/in の interface を implements する
 │   └── port/
-│       ├── in/             # ユースケースの interface（xxxUseCase.ts）と入力（xxxCommand.ts / xxxQuery.ts）
-│       └── out/            # 外部依存の interface（loadXxxPort.ts, updateXxxPort.ts など）
+│       ├── in/             # ユースケースの interface と入力（Command / Query）
+│       └── out/            # 外部依存の interface
 └── adapter/
     ├── in/
     │   └── web/            # Hono のルート・ハンドラー。リクエストを Command/Query に変換して UseCase を呼ぶ
     └── out/
         └── persistence/    # port/out の実装（Prisma など）
 ```
+
+### ファイル名
+
+ドット区切りで種類を表す今の付け方を続ける。名前部分は kebab-case。
+
+| 置き場所 | 種類 | ファイル名の例 |
+| --- | --- | --- |
+| `domain/model` | エンティティ | `answer.entity.ts` |
+| `domain/model` | 値オブジェクト | `summary.value.ts` |
+| `domain/service` | ユースケースの実装 | `register-answer.service.ts` |
+| `port/in` | ユースケースの interface | `register-answer.usecase.ts` |
+| `port/in` | 入力（状態を変える） | `register-answer.command.ts` |
+| `port/in` | 入力（参照する） | `get-answers.query.ts` |
+| `port/out` | 外部依存の interface | `answer-repository.port.ts` |
+| `adapter/in/web` | ルート・ハンドラー・スキーマ | `answers/post/handler.ts` など（今の `api/` 配下の構成と同じ） |
+| `adapter/out/persistence` | `port/out` の実装 | `answer-repository.adapter.rdb.ts`（末尾にインフラ名） |
+| 共通 | テスト | 対象ファイルと同じ場所に `xxx.test.ts` |
 
 ### 依存のルール
 
@@ -54,7 +79,7 @@ src/
 ### テストの方針
 
 - テストフレームワークは Vitest。
-- ドメインモデル: 外部依存なしの単体テスト（`xxx.unit.test.ts`）。
+- ドメインモデル: 外部依存なしの単体テスト。
 - ドメインサービス（ユースケース）: `port/out` をモックしてテストする。
 - アダプター: `adapter/in/web` は API の入出力を、`adapter/out/persistence` はテスト用 DB（`pnpm db:up`）に対してテストする。
 
@@ -71,6 +96,10 @@ src/
 
 新しいパッケージを作るとき、既存パッケージの責務を動かすときは、実装に入る前に必ず相談する。
 
+### 既存パッケージ
+
+`mahjong-api` と `share-photo-api` は `api/` + `modules/` の旧構成のまま。ヘキサゴナル構成への移行は別途計画するので、それまでは勝手に構成を変えない。
+
 ## コマンド
 
 ルートで実行する。
@@ -85,3 +114,4 @@ src/
 
 - PR は 1 PR = 1 主題。変更は 200 行以内・10 ファイル以内（`pr-size-file-count-check.yml` で検査される）に収まるよう分割する。
 - PR はユーザーに頼まれたときだけ作成する。
+- コミットメッセージは日本語で、1 行目に変更の要約を書く。
