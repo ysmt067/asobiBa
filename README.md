@@ -9,7 +9,6 @@
 ## パッケージ一覧
 
 - `packages/mahjong-api` - 麻雀スコア管理API（Hono + Prisma）
-- `packages/gsc-trigger` - Google Cloud Storage トリガー関数
 
 ## 開発方法
 
