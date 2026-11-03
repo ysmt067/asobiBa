@@ -10,15 +10,7 @@ import {db} from '../db';
  */
 export async function cleanupDatabase(): Promise<void> {
   try {
-    // 外部キー制約があるため、順序を考慮して削除
-    await db.$transaction([
-      db.photoTag.deleteMany(),
-      db.photo.deleteMany(),
-      db.tag.deleteMany(),
-      db.account.deleteMany(),
-      db.answer.deleteMany(),
-      db.hand.deleteMany(),
-    ]);
+    await db.$transaction([db.answer.deleteMany(), db.hand.deleteMany()]);
   } catch (error) {
     // テスト用クリーンアップ失敗時はログを出力して再スロー
     console.error('Failed to cleanup test database:', error);

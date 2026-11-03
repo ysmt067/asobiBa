@@ -84,10 +84,13 @@ pnpm prisma:studio
 
 - Answer: 麻雀のスコア計算の回答
 - Hand: 役と翻数の管理
-- Account: ユーザーアカウント
-- Photo: 写真データ
-- Tag: タグ情報
-- PhotoTag: 写真とタグの関連付け
+
+写真のテーブル（Account / Photo / Tag / PhotoTag）は、みてみんさいの API（[mite-min-sai-server](https://github.com/ysmt067/mite-min-sai-server)）の管理に移したので、ここでは定義しない。
+あわせて、マイグレーションの履歴を麻雀のテーブルだけの基準のマイグレーション（`20261103000000_baseline`）に作り直した。
+
+**本番の DB（みてみんさいが使っている DB）に Prisma を向けない。** その DB の写真のテーブルは Prisma の定義にないので、
+`prisma migrate dev` は差分を消そうとし（DB の作り直しを求める）、`prisma migrate deploy` は麻雀のテーブルを作ろうとして失敗する。
+Prisma を使うのは、ローカル・テスト用の DB（`pnpm db:up`）だけにする。
 
 ## 設定
 
