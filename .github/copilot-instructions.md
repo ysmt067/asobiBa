@@ -27,7 +27,7 @@
 - 状態を変える操作（Command）と参照する操作（Query）が混ざっていないか。
 - ファイル名が `CLAUDE.md` の「ファイル名」の表に沿っているか（例: `xxx.entity.ts`, `xxx.usecase.ts`, `xxx.port.ts`, `xxx.adapter.rdb.ts`）。
 
-`mahjong-api` と `share-photo-api` は旧構成（`api/` + `modules/`）のままでよい。旧構成のコードに新構成への移行を求める指摘はしない。
+`mahjong-api` は旧構成（`api/` + `modules/`）のままでよい。旧構成のコードに新構成への移行を求める指摘はしない。
 
 ## テスト
 
