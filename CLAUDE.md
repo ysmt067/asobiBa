@@ -47,9 +47,11 @@ src/
 │       └── out/            # 外部依存の interface
 └── adapter/
     ├── in/
-    │   └── web/            # Hono のルート・ハンドラー。リクエストを Command/Query に変換して UseCase を呼ぶ
+    │   ├── web/            # Hono のルート・ハンドラー。リクエストを Command/Query に変換して UseCase を呼ぶ
+    │   └── messaging/      # Pub/Sub からの受け取り（Push 型・Pull 型とも）。メッセージを Command に変換して UseCase を呼ぶ
     └── out/
-        └── persistence/    # port/out の実装（Prisma など）
+        ├── persistence/    # port/out の実装（Prisma など）
+        └── messaging/      # port/out の実装（Pub/Sub への発行など）
 ```
 
 ### ファイル名
@@ -66,7 +68,9 @@ src/
 | `port/in` | 入力（参照する） | `get-answers.query.ts` |
 | `port/out` | 外部依存の interface | `answer-repository.port.ts` |
 | `adapter/in/web` | ルート・ハンドラー・スキーマ | `answers/post/handler.ts` など（今の `api/` 配下の構成と同じ） |
+| `adapter/in/messaging` | Pub/Sub からの受け取り | `game-event.subscriber.pubsub.ts`（末尾にインフラ名） |
 | `adapter/out/persistence` | `port/out` の実装 | `answer-repository.adapter.rdb.ts`（末尾にインフラ名） |
+| `adapter/out/messaging` | `port/out` の実装（発行） | `game-event-publisher.adapter.pubsub.ts`（末尾にインフラ名） |
 | 共通 | テスト | 対象ファイルと同じ場所に `xxx.test.ts` |
 
 ### 依存のルール
@@ -81,7 +85,14 @@ src/
 - テストフレームワークは Vitest。
 - ドメインモデル: 外部依存なしの単体テスト。
 - ドメインサービス（ユースケース）: `port/out` をモックしてテストする。
-- アダプター: `adapter/in/web` は API の入出力を、`adapter/out/persistence` はテスト用 DB（`pnpm db:up`）に対してテストする。
+- アダプター: `adapter/in/web` は API の入出力を、`adapter/out/persistence` はテスト用 DB（`pnpm db:up`）に対してテストする。`adapter/in/messaging` と `adapter/out/messaging` は Pub/Sub エミュレーターに対してテストする。
+
+## 設計の決定（ADR）
+
+アーキテクチャや設計の決定は `docs/adr/` に ADR として記録する。実装は ADR に従い、ADR と違うことをする必要が出たら、実装の前に相談する。
+
+- [0001. ヘキサゴナルアーキテクチャを採用する](docs/adr/0001-hexagonal-architecture.md)
+- [0002. 麻雀の対局イベントを、イベントを正として保存し Pub/Sub で配信する](docs/adr/0002-mahjong-game-events-pubsub.md)
 
 ## パッケージの分割
 
