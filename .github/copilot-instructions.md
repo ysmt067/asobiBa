@@ -25,15 +25,26 @@
 - `application` が `adapter` や Prisma・Hono・GCS などの外部ライブラリを直接 import していないか。外部とのやりとりは `port/out` の interface を通すこと。
 - `adapter` から `application` への依存はよいが、逆方向の依存がないか。
 - 状態を変える操作（Command）と参照する操作（Query）が混ざっていないか。
-- ファイル名が `CLAUDE.md` の「ファイル名」の表に沿っているか（例: `xxx.entity.ts`, `xxx.usecase.ts`, `xxx.port.ts`, `xxx.adapter.rdb.ts`）。
+- Pub/Sub とのやりとりが `adapter/in/messaging`（受け取り）と `adapter/out/messaging`（発行）に置かれているか。
+- ファイル名が `CLAUDE.md` の「ファイル名」の表に沿っているか（例: `xxx.entity.ts`, `xxx.usecase.ts`, `xxx.port.ts`, `xxx.adapter.rdb.ts`, `xxx.adapter.pubsub.ts`, `xxx.subscriber.pubsub.ts`）。
 
 `mahjong-api` は旧構成（`api/` + `modules/`）のままでよい。旧構成のコードに新構成への移行を求める指摘はしない。
+
+## 設計の決定（ADR）
+
+`docs/adr/` の ADR に反する実装がないか確認する。特に ADR 0002（麻雀の対局イベント）について、次を確認する。
+
+- `mahjong-game-event`（公開するイベントの契約）が `mahjong`（ドメイン）に依存していないか。
+- 購読する側が DB を直接読んでいないか。欠けているイベントは `mahjong-game-api` の取り直し用の取得口から取ること。
+- 購読する側が、重複・欠け・順番の入れ替わりを前提に、通し番号の順に適用しているか。欠けている番号を、ACK せずに待っていないか。
+- 保存するイベントの形を変えるとき、バージョンを上げ、古い形を読むための変換を残しているか。
 
 ## テスト
 
 - Vitest を使っているか。
 - ドメインモデルのテストに外部依存（DB・ネットワーク）がないか。
 - ユースケースのテストで `port/out` をモックしているか。
+- Pub/Sub のアダプターのテストが、Pub/Sub エミュレーターに対して行われているか。
 - 正常系だけでなく、異常系・境界値のテストがあるか。
 
 ## その他
