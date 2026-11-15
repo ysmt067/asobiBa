@@ -1,6 +1,14 @@
 packages:
   - 'packages/*'
 
+# インストール時のスクリプトの実行を許可するパッケージ（pnpm 10 以降は、許可したものだけ実行される）
+allowBuilds:
+  '@biomejs/biome': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
+
 catalog:
   # Dependencies
   '@google-cloud/storage': ^7.16.0
@@ -8,12 +16,12 @@ catalog:
   
   # Dev Dependencies - Build & Dev Tools
   '@biomejs/biome': ^1.9.4
-  '@types/node': ^20.11.17
+  '@types/node': ^24.19.2
   copyfiles: ^2.4.1
   prisma: ^5.20.0
   ts-node: ^10.9.2
   tsx: ^4.7.1
-  typescript: ^4.9.4
+  typescript: ^5.9.3
   
   # Dev Dependencies - Testing
   '@vitest/coverage-v8': ^2.1.8
