@@ -1,0 +1,19 @@
+{
+  "name": "@asobiba/mahjong-game-event",
+  "version": "1.0.0",
+  "description": "麻雀の対局イベント（公開するイベント）の契約",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest --passWithNoTests",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}
